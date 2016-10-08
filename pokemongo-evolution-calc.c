@@ -28,7 +28,7 @@ int main()
 	scanf("%d", &pokemon_no);
 	
 	//Tries to sell remained pokemon
-	while(pokemon_no + candies_no > candies_evol){
+	while(pokemon_no > 0 && pokemon_no + candies_no > candies_evol){
 		if(candies_no >= candies_evol){
 			//Evolve!
 			pokemon_no--;
