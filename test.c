@@ -102,10 +102,18 @@ Results new_method(Params p) {
 	int traded_p = 0;
 	
 	r.evolved = min(p.p, (p.p + p.c - 1) / p.e);
-	
 	spent_c = r.evolved * p.e;
+
+	if (r.evolved == p.p) {
+		r.rem_p = 0;
+		r.rem_c = p.c - spent_c + r.evolved;
+		r.sold = 0; 
+	}
+	
+	else {
+		
+	}
 	if (spent_c < p.c + r.evolved) {
-		traded_p = 0;
 		r.rem_c = p.c - spent_c + r.evolved;
 		r.rem_p = p.p - r.evolved;
 		r.sold = 0;
@@ -122,9 +130,9 @@ Results new_method(Params p) {
 int equal(Results r1, Results r2)
 {
 	return r1.evolved == r2.evolved
-		/*&& r1.sold == r2.sold
-		&& r1.rem_c == r2.rem_c
-		&& r1.rem_p == r2.rem_p*/;
+		&& (r1.sold == r2.sold || r2.sold == -1)
+		&& (r1.rem_c == r2.rem_c || r2.rem_c == -1)
+		&& (r1.rem_p == r2.rem_p || r2.rem_p == -1);
 }
 
 int min(int a, int b) {
