@@ -12,8 +12,8 @@
 #include <stdlib.h>
 
 typedef struct _results {
-	int s;
-	int evol;
+	int sold;
+	int evolved;
 	int rem_p;
 	int rem_c;
 } Results;
@@ -24,6 +24,7 @@ typedef struct _params {
 	int e;
 } Params;
 
+int min(int, int);
 Results old_method(Params);
 Results new_method(Params);
 int equal(Results, Results);
@@ -44,7 +45,7 @@ int main()
 	
 	for (pokemon_no = 1; pokemon_no < 100; pokemon_no++) {
 		for (candies_no = 1; candies_no < 100; candies_no++) {
-			for (candies_evol = 12; candies_evol < 100; candies_evol++) {
+			for (candies_evol = 1; candies_evol < 100; candies_evol++) {
 				p.p = pokemon_no;
 				p.c = candies_no;
 				p.e = candies_evol;
@@ -54,10 +55,10 @@ int main()
 
 				if (!equal(r1, r2)) {
 					printf("the two methods differ with:\n");
-					printf("%d, %d, %d\n", pokemon_no, candies_no, candies_evol);
+					printf("pokemon: %d, candies: %d, candies per evol: %d\n", pokemon_no, candies_no, candies_evol);
 					printf("results:\n");
-					printf("r1: %d %d %d %d", r1.s, r1.evol, r1.rem_c, r1.rem_p);
-					printf("r2: %d %d %d %d", r2.s, r2.evol, r2.rem_c, r2.rem_p);
+					printf("r1 -- sold: %d evolved: %d remaining candies: %d remaining pokemon: %d\n", r1.sold, r1.evolved, r1.rem_c, r1.rem_p);
+					printf("r2 -- sold: %d evolved: %d remaining candies: %d remaining pokemon: %d\n", r2.sold, r2.evolved, r2.rem_c, r2.rem_p);
 					exit(1);
 				}
 			}
@@ -78,18 +79,18 @@ int main()
 Results old_method(Params p)
 {
 	Results r;
-	r.s = 0;
-	r.evol = 0;
+	r.sold = 0;
+	r.evolved = 0;
 
 	while(p.p > 0 && p.p + p.c > p.e){
 		if(p.c >= p.e){
 			//Evolve!
 			p.p--;
-			r.evol++;
+			r.evolved++;
 			p.c = (p.c - p.e) + 1;
 		}
 		else{
-			r.s++;
+			r.sold++;
 			p.p--;
 			p.c++;
 		}
@@ -106,19 +107,19 @@ Results new_method(Params p) {
 	int spent_c = 0;
 	int traded_p = 0;
 	
-	r.evol = (p.p + p.c - 1) / p.e;
+	r.evolved = min(p.p, (p.p + p.c - 1) / p.e);
 	
-	spent_c = r.evol * p.e;
-	if (spent_c < p.c + r.evol) {
+	spent_c = r.evolved * p.e;
+	if (spent_c < p.c + r.evolved) {
 		traded_p = 0;
-		r.rem_c = p.c - spent_c + r.evol;
-		r.rem_p = p.p - r.evol;
-		r.s = 0;
+		r.rem_c = p.c - spent_c + r.evolved;
+		r.rem_p = p.p - r.evolved;
+		r.sold = 0;
 	}
 	else {
-		r.s = spent_c - p.c - r.evol;
-		r.rem_p = p.p - r.evol - r.s;
-		r.rem_c = p.c + r.evol - spent_c + r.s;
+		r.sold = spent_c - p.c - r.evolved;
+		r.rem_p = p.p - r.evolved - r.sold;
+		r.rem_c = p.c + r.evolved - spent_c + r.sold;
 	}
 
 	return r;
@@ -126,5 +127,15 @@ Results new_method(Params p) {
 
 int equal(Results r1, Results r2)
 {
-	return r1.evol == r2.evol;
+	return r1.evolved == r2.evolved
+		&& r1.sold == r2.sold
+		&& r1.rem_c == r2.rem_c
+		&& r1.rem_p == r2.rem_p;
+}
+
+int min(int a, int b) {
+	if (a > b) {
+		return b;
+	}
+	return a;
 }
