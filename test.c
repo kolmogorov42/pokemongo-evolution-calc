@@ -57,8 +57,8 @@ int main()
 					printf("the two methods differ with:\n");
 					printf("pokemon: %d, candies: %d, candies per evol: %d\n", pokemon_no, candies_no, candies_evol);
 					printf("results:\n");
-					printf("r1 -- sold %d, evolved %d, remaining candies %d, remaining pokemon %d\n", r1.sold, r1.evolved, r1.rem_c, r1.rem_p);
-					printf("r2 -- sold %d, evolved %d, remaining candies %d, remaining pokemon %d\n", r2.sold, r2.evolved, r2.rem_c, r2.rem_p);
+					printf("old -- sold %d, evolved %d, remaining candies %d, remaining pokemon %d\n", r1.sold, r1.evolved, r1.rem_c, r1.rem_p);
+					printf("new -- sold %d, evolved %d, remaining candies %d, remaining pokemon %d\n", r2.sold, r2.evolved, r2.rem_c, r2.rem_p);
 					exit(1);
 				}
 			}
@@ -96,7 +96,8 @@ Results old_method(Params p)
 	return r;
 }
 
-Results new_method(Params p) {
+Results new_method(Params p)
+{
 	Results r;
 	int spent_c = 0;
 	int traded_p = 0;
@@ -110,6 +111,7 @@ Results new_method(Params p) {
 		r.sold = 0; 
 	}
 	
+	/* incorrect from here on */
 	else {
 		
 	}
@@ -135,7 +137,8 @@ int equal(Results r1, Results r2)
 		&& (r1.rem_p == r2.rem_p || r2.rem_p == -1);
 }
 
-int min(int a, int b) {
+int min(int a, int b)
+{
 	if (a > b) {
 		return b;
 	}
