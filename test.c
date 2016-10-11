@@ -16,6 +16,7 @@ typedef struct _results {
 	int evolved;
 	int rem_p;
 	int rem_c;
+	int pass;
 } Results;
 
 typedef struct _params {
@@ -29,7 +30,7 @@ Results old_method(Params);
 Results new_method(Params);
 int equal(Results, Results);
 
-int main()
+int main(int argc, char *argv[])
 {
 	int candies_no = 0;
 	int candies_evol = 0;
@@ -76,14 +77,14 @@ Results old_method(Params p)
 	r.sold = 0;
 	r.evolved = 0;
 
-	while(p.p > 0 && p.p + p.c > p.e){
-		if(p.c >= p.e){
+	while (p.p > 0 && p.p + p.c > p.e) {
+		if (p.c >= p.e) {
 			//Evolve!
 			p.p--;
 			r.evolved++;
 			p.c = (p.c - p.e) + 1;
 		}
-		else{
+		else {
 			r.sold++;
 			p.p--;
 			p.c++;
@@ -101,29 +102,26 @@ Results new_method(Params p)
 	Results r;
 	int spent_c = 0;
 	int traded_p = 0;
+	r.pass = 0;
 	
 	r.evolved = min(p.p, (p.p + p.c - 1) / p.e);
 	spent_c = r.evolved * p.e;
 
-	if (r.evolved == p.p) {
-		r.rem_p = 0;
+	/*if (r.evolved == p.p) {*/
+	if (spent_c <= p.c) {
+		r.rem_p = p.p - r.evolved;
 		r.rem_c = p.c - spent_c + r.evolved;
 		r.sold = 0; 
 	}
 	
 	/* incorrect from here on */
 	else {
-		
-	}
-	if (spent_c < p.c + r.evolved) {
-		r.rem_c = p.c - spent_c + r.evolved;
-		r.rem_p = p.p - r.evolved;
-		r.sold = 0;
-	}
-	else {
-		r.sold = spent_c - p.c - r.evolved;
-		r.rem_p = p.p - r.evolved - r.sold;
-		r.rem_c = p.c + r.evolved - spent_c + r.sold;
+		/*
+		r.sold = spent_c - p.c - (r.evolved - 1);
+		r.rem_p = p.p - r.sold - r.evolved;
+		r.rem_c = p.c + r.evolved + r.sold - spent_c;
+		*/
+		r.pass = 1; 
 	}
 
 	return r;
@@ -132,9 +130,7 @@ Results new_method(Params p)
 int equal(Results r1, Results r2)
 {
 	return r1.evolved == r2.evolved
-		&& (r1.sold == r2.sold || r2.sold == -1)
-		&& (r1.rem_c == r2.rem_c || r2.rem_c == -1)
-		&& (r1.rem_p == r2.rem_p || r2.rem_p == -1);
+		&& (r2.pass || ((r1.sold == r2.sold) && (r1.rem_c == r2.rem_c) && (r1.rem_p == r2.rem_p)));
 }
 
 int min(int a, int b)
