@@ -1,3 +1,5 @@
+.idea
+*.out
 *.o
 *.exe
 .clang-format
