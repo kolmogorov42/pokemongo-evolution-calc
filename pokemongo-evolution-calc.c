@@ -10,42 +10,49 @@
 
 #include <stdio.h>
 
-int main()
-{
-	int candies_no = 0;
-	int candies_evol = 0;
-	int pokemon_no = 0;
-	int evol_pokemon_no = 0;
-	int sold_pokemon = 0;
-	
-	printf("How many candies do you have?\n");
-	scanf("%d", &candies_no);
-	
-	printf("How many candies the pokémon needs to evolve?\n");
-	scanf("%d", &candies_evol);
-	
-	printf("How many pokémons do you have?\n");
-	scanf("%d", &pokemon_no);
-	
-	//Tries to sell remained pokemon
-	while(pokemon_no > 0 && pokemon_no + candies_no > candies_evol){
-		if(candies_no >= candies_evol){
-			//Evolve!
-			pokemon_no--;
-			evol_pokemon_no++;
-			candies_no = (candies_no - candies_evol) + 1;
-		}
-		else{
-			sold_pokemon++;
-			pokemon_no--;
-			candies_no++;
-		}
-	}
-	
-	printf("You have to sell %d pokémons\n", sold_pokemon);
-	printf("You can evolve %d pokémons\n", evol_pokemon_no);
-	printf("You will have %d remaining pokémons\n", pokemon_no);
-	printf("You will have %d remaining candies\n", candies_no);
-	
-	return 0;
+int main() {
+    int candies_no = 0;
+    int candies_evol = 0;
+    int pokemon_no = 0;
+    int evol_pokemon_no = 0;
+    int sold_pokemon = 0;
+
+    printf("How many candies do you have? ");
+    scanf("%d", &candies_no);
+
+    printf("How many candies the pokémon needs to evolve? ");
+    scanf("%d", &candies_evol);
+
+    printf("How many pokémons do you have? ");
+    scanf("%d", &pokemon_no);
+
+    // Tries to sell remained pokemon
+    while (pokemon_no > 0 && pokemon_no + candies_no > candies_evol) {
+        if (candies_no >= candies_evol) {
+            // Evolve!
+            pokemon_no--;
+            evol_pokemon_no++;
+            candies_no = (candies_no - candies_evol) + 1;
+        } else {
+            sold_pokemon++;
+            pokemon_no--;
+            candies_no++;
+        }
+    }
+
+    printf("You can evolve %d pokémons.\n", evol_pokemon_no);
+
+    if (pokemon_no == 0) {
+        printf("You have to sell %d pokémons.\n", sold_pokemon);
+        printf("You will have no remaining pokémons.\n");
+        printf("You will have %d remaining candies.\n", candies_no);
+    } else {
+        printf("You have to sell %d pokémons, though you can sell up to %d.\n",
+               sold_pokemon, sold_pokemon + pokemon_no);
+        printf("You will have up to %d remaining pokémons.\n", pokemon_no);
+        printf("You will have %d to %d remaining candies.\n", candies_no,
+               candies_no + pokemon_no);
+    }
+
+    return 0;
 }
