@@ -40,7 +40,7 @@ int main() {
         }
     }
 
-    printf("You can evolve %d pokémons.\n", evol_pokemon_no);
+    printf("\nYou can evolve %d pokémons.\n", evol_pokemon_no);
 
     if (pokemon_no == 0) {
         printf("You have to sell %d pokémons.\n", sold_pokemon);
